@@ -14,6 +14,7 @@
 
 from distutils.core import setup, Extension
 import os, sys
+import subprocess
 
 VERSION = "1.2a3-20060212"
 
@@ -29,7 +30,15 @@ with the WCK renderer.
 """
 
 # pointer to freetype build directory (tweak as necessary)
-FREETYPE_ROOT = "/usr/"
+# Use freetype-config to get the location of freetype
+try:
+    FREETYPE_ROOT = subprocess.check_output(
+        ['freetype-config', '--prefix']).strip()
+except OSError:
+    FREETYPE_ROOT = "/usr/"
+except subprocess.CalledProcessError:
+    FREETYPE_ROOT = "/usr/"
+
 
 if not os.path.isdir(FREETYPE_ROOT):
     print "===", "freetype not available (edit setup.py to enable)"
