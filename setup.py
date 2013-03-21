@@ -32,8 +32,11 @@ with the WCK renderer.
 # pointer to freetype build directory (tweak as necessary)
 # Use freetype-config to get the location of freetype
 try:
-    FREETYPE_ROOT = subprocess.check_output(
-        ['freetype-config', '--prefix']).strip()
+    p = subprocess.Popen(
+        ['freetype-config', '--prefix'],
+        stdout=subprocess.PIPE)
+    FREETYPE_ROOT = p.stdout.read().strip()
+    del p
 except OSError:
     FREETYPE_ROOT = "/usr/"
 except subprocess.CalledProcessError:
